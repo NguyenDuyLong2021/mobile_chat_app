@@ -1,20 +1,14 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { NavigationContainer } from "@react-navigation/native";
+import { useState } from "react";
+import BottomNav from "./src/navigators/BottomNav";
+import StackAuth from "./src/navigators/StackAuth";
+import { availabels } from "./src/themes/_availables";
 
 export default function App() {
+  const [login, setLogin] = useState(true);
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer theme={{colors: availabels.color.white}}>
+      {login ? <BottomNav /> : <StackAuth />}
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
