@@ -2,7 +2,7 @@ import { View, Text, Image, StyleSheet } from "react-native";
 import React from "react";
 import { layouts } from "../themes/_layout";
 import WelcomeImg from "../assets/imgs/Welcome.img";
-import { availabels } from "../themes/_availables";
+import {available } from "../themes/_availables";
 import ButtonSolid from "./commons_components/ButtonSolid";
 import ButtonEmpty from "./commons_components/ButtonEmpty";
 
@@ -17,7 +17,7 @@ export default function Intro({ navigation }) {
       <View style={{ flex: 2 }}>
         <WelcomeImg />
         <Text
-          style={[layouts.text_center, { color: availabels.color.primary }]}
+          style={[layouts.text_center, { color: available.color.primary }]}
         >
           Join with us to day and let's talk together.
         </Text>
@@ -32,6 +32,6 @@ export default function Intro({ navigation }) {
 const style = StyleSheet.create({
   image: {
     flex: 1,
-    width: availabels.width,
+    width: available.width,
   },
 });

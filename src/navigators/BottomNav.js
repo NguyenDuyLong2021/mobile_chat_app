@@ -5,7 +5,7 @@ import Chat from "../components/Chat";
 import Profile from "../components/Profile";
 import Contact from "../components/Contact";
 
-import { availabels } from "../themes/_availables";
+import { available } from "../themes/_availables";
 import { Image, StyleSheet } from "react-native";
 
 const Tab = createBottomTabNavigator();
@@ -16,7 +16,7 @@ export default function BottomNav() {
       screenOptions={{
         tabBarStyle: {
           height: 60,
-          backgroundColor: availabels.color.white,
+          backgroundColor: available.color.white,
           borderTopWidth: 0,
           marginTop: 200,
         },
@@ -32,15 +32,15 @@ export default function BottomNav() {
             />
           ),
           tabBarBadgeStyle: {
-            color: availabels.color.white,
-            backgroundColor: availabels.color.primary,
+            color: available.color.white,
+            backgroundColor:  available.color.primary,
           },
           // tabBarActiveTintColor: availabels.color.primary,
           title: "Contact",
         }}
         name="Contact"
         children={() => (
-          <StackContact heightStatusBar={availabels.heightStatusBar} />
+          <StackContact heightStatusBar={available.heightStatusBar} />
         )}
       />
       <Tab.Screen
@@ -53,8 +53,8 @@ export default function BottomNav() {
             />
           ),
           tabBarBadgeStyle: {
-            color: availabels.color.white,
-            backgroundColor: availabels.color.primary,
+            color: available.color.white,
+            backgroundColor: available.color.primary,
           },
           // tabBarActiveTintColor: availabels.color.primary,
           title: "Chat",
@@ -62,6 +62,22 @@ export default function BottomNav() {
         name="Chat"
        component={Chat}
       />
+
+{/* const ChatStack = ({navigation}) ={">"} (
+  <Stack.Navigator>
+    <Stack.Screen name="Chat" component={Chat} />
+    <Stack.Screen
+      name="ChatScreen"
+      component={ChatScreen}
+      options={({route}) => ({
+        title: route.params.userName,
+        headerBackTitleVisible: false,
+      })}
+    />
+  </Stack.Navigator>
+); */}
+
+
       <Tab.Screen
         options={{
           headerShown: false,
@@ -72,8 +88,8 @@ export default function BottomNav() {
             />
           ),
           tabBarBadgeStyle: {
-            color: availabels.color.white,
-            backgroundColor: availabels.color.primary,
+            color: available.color.white,
+            backgroundColor: available.color.primary,
           },
           // tabBarActiveTintColor: availabels.color.primary,
           title: "Profile",
@@ -83,7 +99,22 @@ export default function BottomNav() {
       />
     </Tab.Navigator>
   );
+
+  
 }
+const ChatStack = ({navigation}) => (
+  <Stack.Navigator>
+    <Stack.Screen name="Chat" component={Chat} />
+    <Stack.Screen
+      name="ChatScreen"
+      component={ChatScreen}
+      options={({route}) => ({
+        title: route.params.userName,
+        headerBackTitleVisible: false,
+      })}
+    />
+  </Stack.Navigator>
+);
 const style = StyleSheet.create({
   icon_tab: {
     width: 40,
