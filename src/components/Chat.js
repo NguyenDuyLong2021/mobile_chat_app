@@ -12,6 +12,7 @@ import {
   MessageText,
   TextSection,
 } from '../assets/styles/chatStyle'
+import UIHeader from './UIHeader';
 
 const ChatData = [
   {
@@ -57,8 +58,13 @@ const ChatData = [
 ];
 
 const Chat = ({navigation}) => {
+
+
   return (
     <Container>
+      <UIHeader
+    title={"Messenger"} 
+    />
       <FlatList 
         data={ChatData}
         keyExtractor={item=>item.id}
@@ -88,6 +94,7 @@ const style = StyleSheet.create({
   container: {
     flex: 1, 
     alignItems: 'center', 
-    justifyContent: 'center'
+    justifyContent: 'center',
+  
   },
 });
