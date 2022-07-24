@@ -3,12 +3,12 @@ import { useState } from "react";
 import Chat from "./src/components/chat/Chat";
 import BottomNav from "./src/navigators/BottomNav";
 import StackAuth from "./src/navigators/StackAuth";
-import { availabels } from "./src/themes/_availables";
+import {available } from "./src/themes/_availables";
 
 export default function App() {
   const [login, setLogin] = useState(true);
   return (
-    <NavigationContainer theme={{colors: availabels.color.white}}>
+    <NavigationContainer theme={{colors: available.color.white}}>
       {login ? <BottomNav /> : <StackAuth />}
     </NavigationContainer>
     // <Chat/>

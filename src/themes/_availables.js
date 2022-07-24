@@ -1,6 +1,6 @@
 import { Dimensions, StatusBar } from "react-native";
-export const availabels = {
-  //availble common on project
+export const available = {
+ 
   color: {
     primary: "#24A60A",
     white: "#FFFFFF",

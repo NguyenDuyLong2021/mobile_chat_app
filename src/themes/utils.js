@@ -1,8 +1,8 @@
 import { StyleSheet } from "react-native";
-import { availabels } from "./_availables";
+import { available } from "./_availables";
 export const utils = StyleSheet.create({
   logo: {
     flex: 1,
-    width: availabels.width,
+    width: available.width,
   },
 });

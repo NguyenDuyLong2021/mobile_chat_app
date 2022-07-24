@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import React from "react";
 import SignUpSVG from "../assets/imgs/SignUp";
-import { availabels } from "../themes/_availables";
+import {available } from "../themes/_availables";
 import { layouts } from "../themes/_layout";
 import { utils } from "../themes/utils";
 import ButtonSolid from "./commons_components/ButtonSolid";
@@ -38,7 +38,7 @@ export default function SignUp({navigation}) {
             source={require("../assets/imgs/email.png")}
           />
           <TextInput
-            selectionColor={availabels.color.primary}
+            selectionColor={available.color.primary}
             placeholder="Enter user name"
             style={style.text_input}
           ></TextInput>
@@ -50,7 +50,7 @@ export default function SignUp({navigation}) {
             source={require("../assets/imgs/lock.png")}
           />
           <TextInput
-            selectionColor={availabels.color.primary}
+            selectionColor={available.color.primary}
             placeholder="Enter password"
             style={style.text_input}
           ></TextInput>
@@ -62,7 +62,7 @@ export default function SignUp({navigation}) {
             source={require("../assets/imgs/phone.png")}
           />
           <TextInput
-            selectionColor={availabels.color.primary}
+            selectionColor={available.color.primary}
             placeholder="Enter user name"
             style={style.text_input}
           ></TextInput>
@@ -71,26 +71,26 @@ export default function SignUp({navigation}) {
       </View>
       <Text style={[layouts.text_center, style.help, style.ip_user]} onPress={()=> navigation.navigate("Login")}>
         You have account{" "}
-        <Text style={{ color: availabels.color.primary }}>Login now</Text>
+        <Text style={{ color: available.color.primary }}>Login now</Text>
       </Text>
     </View>
   );
 }
 const style = StyleSheet.create({
   text_ip: {
-    width: availabels.width - 20,
+    width: available.width - 20,
     padding: 10,
     borderWidth: 2,
-    borderColor: availabels.color.primary,
-    borderRadius: availabels.border_radius.r1,
-    color: availabels.color.primary,
-    fontWeight: availabels.fw_1,
-    fontSize: availabels.fs_0,
+    borderColor: available.color.primary,
+    borderRadius: available.border_radius.r1,
+    color: available.color.primary,
+    fontWeight: available.fw_1,
+    fontSize: available.fs_0,
   },
   lable: {
     marginStart: 10,
-    fontSize: availabels.fs_0,
-    color: availabels.color.grey,
+    fontSize: available.fs_0,
+    color: available.color.grey,
   },
   ip_user: {
     marginBottom: 20,
@@ -99,9 +99,9 @@ const style = StyleSheet.create({
     marginTop: 20,
   },
   help: {
-    fontWeight: availabels.fw_2,
-    fontSize: availabels.fs_0,
-    color: availabels.color.grey,
+    fontWeight: available.fw_2,
+    fontSize: available.fs_0,
+    color: available.color.grey,
   },
   //
   text_input_area: {
@@ -112,10 +112,10 @@ const style = StyleSheet.create({
     height: 40,
   },
   text_input: {
-    width: availabels.width - 60,
+    width: available.width - 60,
     borderBottomWidth: 1,
-    borderBottomColor: availabels.color.grey,
-    color: availabels.color.primary,
+    borderBottomColor: available.color.grey,
+    color: available.color.primary,
     padding: 10,
   },
 });

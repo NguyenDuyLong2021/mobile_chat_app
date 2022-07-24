@@ -1,6 +1,6 @@
 import { TouchableOpacity, Text, StyleSheet } from "react-native";
 import React from "react";
-import { availabels } from "../../themes/_availables";
+import { available } from "../../themes/_availables";
 import { layouts } from "../../themes/_layout";
 
 export default function ButtonEmpty(props) {
@@ -14,17 +14,17 @@ export default function ButtonEmpty(props) {
 }
 const style = StyleSheet.create({
   buttonSolid: {
-    width: availabels.width - 30,
+    width: available.width - 30,
     height: null,
     padding: 10,
-    borderColor: availabels.color.primary,
-    borderRadius: availabels.border_radius.r1,
+    borderColor: available.color.primary,
+    borderRadius: available.border_radius.r1,
     marginTop: 10,
     marginBottom: 10,
   },
   text:{
-    color: availabels.color.primary,
-    fontWeight: availabels.fw_1,
-    fontSize: availabels.fs_1
+    color: available.color.primary,
+    fontWeight: available.fw_1,
+    fontSize: available.fs_1
   }
 });

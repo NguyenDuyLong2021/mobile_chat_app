@@ -7,16 +7,14 @@ import {
   Image,
   TouchableOpacity,
   KeyboardAvoidingView,
-  Keyboard,
 } from "react-native";
 import React, { useState } from "react";
 import { FontAwesome } from "@expo/vector-icons";
-import { availabels } from "../../themes/_availables";
 import CustomChatButton from "./CustomChatButton";
-("../../themes/_availables");
 import { Feather } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 import Message from "./Message";
+import { available as availabels } from "../../themes/_availables";
 
 export default function Chat({ navigation }) {
   const [message, setMessage] = useState("");

@@ -1,14 +1,14 @@
 import { StyleSheet } from "react-native";
-import { availabels } from "./_availables";
+import { available as available } from "./_availables";
 export const layouts = StyleSheet.create({
   container: {
-    backgroundColor: availabels.color.white,
+    backgroundColor: available.color.white,
     flex: 1,
     justifyContent: "center",
   },
   text_center:{
     textAlign: "center",
-    fontSize: availabels.fs_0,
+    fontSize: available.fs_0,
   },
   text_right:{
     textAlign: "right"
