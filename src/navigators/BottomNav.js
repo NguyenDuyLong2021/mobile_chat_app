@@ -1,12 +1,12 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import StackContact from "./StackContact";
-import Chat from "../components/Chat";
 import Profile from "../components/Profile";
 import Contact from "../components/Contact";
 
 import { availabels } from "../themes/_availables";
 import { Image, StyleSheet } from "react-native";
+import Chat from "../components/chat/Chat";
 
 const Tab = createBottomTabNavigator();
 
@@ -18,7 +18,6 @@ export default function BottomNav() {
           height: 60,
           backgroundColor: availabels.color.white,
           borderTopWidth: 0,
-          marginTop: 200,
         },
       }}
     >
@@ -60,7 +59,7 @@ export default function BottomNav() {
           title: "Chat",
         }}
         name="Chat"
-       component={Chat}
+        component={Chat}
       />
       <Tab.Screen
         options={{
