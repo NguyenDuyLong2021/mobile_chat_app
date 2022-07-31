@@ -7,8 +7,6 @@ export const Container = styled.View`
   padding-right: 20px;
   align-items: center;
   background-color: #ffffffff;
-  ${'' /* height: 100%;
-  margin-top: 30px; */}
   height: 300px;
  
 
@@ -54,13 +52,10 @@ export const UserInfoText = styled.View`
 export const UserName = styled.Text`
   font-size: 14px;
   font-weight: bold;
-  font-family: 'sans-serif';
 `;
 
 export const PostTime = styled.Text`
   font-size: 12px;
-  color: #666;
-  font-family: 'sans-serif';
 `;
 
 export const MessageText = styled.Text`

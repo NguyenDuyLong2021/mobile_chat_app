@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import StackContact from "./StackContact";
 import Profile from "../components/Profile";
@@ -9,7 +9,6 @@ import { Image, StyleSheet } from "react-native";
 import Chat from "../components/chat/Chat";
 
 const Tab = createBottomTabNavigator();
-
 export default function BottomNav() {
   return (
     <Tab.Navigator
@@ -32,8 +31,9 @@ export default function BottomNav() {
           ),
           tabBarBadgeStyle: {
             color: available.color.white,
-            backgroundColor:  available.color.primary,
+            backgroundColor: available.color.primary,
           },
+
           // tabBarActiveTintColor: availabels.color.primary,
           title: "Contact",
         }}
@@ -43,7 +43,7 @@ export default function BottomNav() {
         )}
       />
       <Tab.Screen
-        options={{
+        options={({ route }) => ({
           headerShown: false,
           tabBarIcon: () => (
             <Image
@@ -57,12 +57,16 @@ export default function BottomNav() {
           },
           // tabBarActiveTintColor: availabels.color.primary,
           title: "Chat",
-        }}
+          tabBarButton: () => null,
+          tabBarStyle: {
+            display: route.name === "Chat" ? "none" : "flex",
+          },
+        })}
         name="Chat"
         component={Chat}
       />
 
-{/* const ChatStack = ({navigation}) ={">"} (
+      {/* const ChatStack = ({navigation}) ={">"} (
   <Stack.Navigator>
     <Stack.Screen name="Chat" component={Chat} />
     <Stack.Screen
@@ -75,7 +79,6 @@ export default function BottomNav() {
     />
   </Stack.Navigator>
 ); */}
-
 
       <Tab.Screen
         options={{
@@ -98,16 +101,14 @@ export default function BottomNav() {
       />
     </Tab.Navigator>
   );
-
-  
 }
-const ChatStack = ({navigation}) => (
+const ChatStack = ({ navigation }) => (
   <Stack.Navigator>
     <Stack.Screen name="Chat" component={Chat} />
     <Stack.Screen
       name="ChatScreen"
       component={ChatScreen}
-      options={({route}) => ({
+      options={({ route }) => ({
         title: route.params.userName,
         headerBackTitleVisible: false,
       })}
