@@ -4,7 +4,6 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 const Stack = createNativeStackNavigator();
 
 export default function StackContact(props) {
-  console.log("truyền đươc", props.hai)
   return (
     <Stack.Navigator screenOptions={{contentStyle:{marginTop: props.heightStatusBar}}} >
       <Stack.Screen options={{ headerShown: false}} name="Contact" component={Contact} />

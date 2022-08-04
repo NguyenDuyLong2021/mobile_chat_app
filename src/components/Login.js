@@ -6,14 +6,58 @@ import {
   Text,
   TouchableOpacity,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { layouts } from "../themes/_layout";
 import { utils } from "../themes/utils";
-import {available } from "../themes/_availables";
-import ButtonSolid from "./commons_components/ButtonSolid";
+import { available } from "../themes/_availables";
+import ButtonSolidSubmit from "../components/commons_components/ButtonSolidSubmit";
 import LoginSVG from "../assets/imgs/Login.img";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { AsyncStorage } from "react-native";
+import { async } from "@firebase/util";
+import AuthContext from "../../context";
 
-export default function Login({navigation}) {
+export default function Login({ navigation }) {
+  const { signIn } = React.useContext(AuthContext);
+  const [authentication, setAuthentcation] = useState({
+    email: "",
+    password: "",
+  });
+
+  //login
+  const login = () => {
+    signInWithEmailAndPassword(
+      auth,
+      authentication.email,
+      authentication.password
+    )
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        signIn()
+        saveData({
+          providerData: user.providerData,
+          stsTokenManager: user.stsTokenManager,
+        });
+
+        // console.log(userCredential)
+        // navigation.navigate("BottomNav");
+        // ...
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorMessage);
+      });
+  };
+  const saveData = async (user) => {
+    try {
+      await AsyncStorage.setItem("USER", JSON.stringify(user));
+    } catch (error) {
+      console.log("lõi mẹ r", error);
+    }
+  };
+  const auth = getAuth();
   return (
     <View style={layouts.container}>
       <Image
@@ -47,6 +91,9 @@ export default function Login({navigation}) {
             selectionColor={available.color.primary}
             placeholder="Enter user name"
             style={style.text_input}
+            onChangeText={(newEmail) => {
+              setAuthentcation({ ...authentication, email: newEmail });
+            }}
           ></TextInput>
         </View>
         <View style={[style.text_input_area, style.ip_pass]}>
@@ -58,6 +105,12 @@ export default function Login({navigation}) {
             selectionColor={available.color.primary}
             placeholder="Enter password"
             style={style.text_input}
+            onChangeText={(newPassword) =>
+              setAuthentcation({
+                ...authentication,
+                password: newPassword,
+              })
+            }
           ></TextInput>
         </View>
         <TouchableOpacity
@@ -69,9 +122,12 @@ export default function Login({navigation}) {
         >
           <Text style={style.lable}>Forgot password</Text>
         </TouchableOpacity>
-        <ButtonSolid name="Login" />
+        <ButtonSolidSubmit name="Login" callback={login} />
       </View>
-      <Text style={[layouts.text_center, style.help, style.ip_user]} onPress={()=> navigation.navigate("SignUp")}>
+      <Text
+        style={[layouts.text_center, style.help, style.ip_user]}
+        onPress={() => navigation.navigate("SignUp")}
+      >
         Dont have account{" "}
         <Text style={{ color: available.color.primary }}>Register</Text>
       </Text>
