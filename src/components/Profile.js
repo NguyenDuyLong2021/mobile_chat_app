@@ -6,14 +6,19 @@ import { FontAwesome } from "@expo/vector-icons";
 import { getAuth, signOut } from 'firebase/auth';
 // import {ref,set,get,getDatabase,query,onValue,off,limitToLast,orderByChild,} from "firebase/database";
 import { AsyncStorage } from 'react-native';
-
+import AuthContext from '../../context';
 export default function Profile({navigation}) {
+  const { signOut } = React.useContext(AuthContext);
   
-  const auth = getAuth();
-  const logOut =()=>{
-navigation.popToTop();
-  } 
-  
+//   const auth = getAuth();
+//   const logOut =()=>{
+// navigation.popToTop();
+//   } 
+
+  const logOut = () => {
+    signOut()
+      };
+
   // const database = getDatabase(app);
   // //Lấy thông tin user từ id
   // console.log(database);
@@ -43,7 +48,10 @@ navigation.popToTop();
       <Button title='Cập nhật' color='#228b22' style={styles.btn_UpDate}>
 
       </Button>
-      <Button title='dsdasd' style={styles.btn_logout} onPress={()=>navigation.navigate("Auth", {isLogin: false})}>
+      <Button title='dsdasd' style={styles.btn_logout} 
+      // onPress={()=>navigation.navigate("Auth", {isLogin: false})}
+      onPress={logOut}
+      >
         <FontAwesome style={{ fontSize: 18, color: 'white'}} name="sign-out" size={18} color="black"/>
         <Text style={styles.logOutTxt}>Log out</Text>
       </Button>
