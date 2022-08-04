@@ -1,10 +1,13 @@
-import { View, Text, StyleSheet, Image, TextInput} from 'react-native'
 import React from 'react'
+import { View, Text, StyleSheet, Image, TextInput, Button} from 'react-native'
 import { available } from '../themes/_availables'
 import avt from '../assets/imgs/avt3.jpg'
 import { FontAwesome } from "@expo/vector-icons";
+import {get} from "firebase"
+// import Login from './Login';
 
 export default function Profile(props) {
+
   return (
     <View style={[{marginTop: available.heightStatusBar}]}>
       <View style={styles.header_style}>
@@ -27,15 +30,33 @@ export default function Profile(props) {
         <Text style={styles.tiltle}>Phone Number</Text>
         <TextInput value='0123456789' style={styles.input}/>
       </View>
-      <View style={styles.btn_logout}>
+      <Button title='dsdasd' style={styles.btn_logout} onPress={logOut}>
         <FontAwesome style={{ fontSize: 18, color: 'white'}} name="sign-out" size={18} color="black"/>
         <Text style={styles.logOutTxt}>Log out</Text>
-      </View>
+      </Button>
       
 
     </View>
   )
 }
+
+
+
+// const auth = getAuth();
+
+const logOut = () => {
+  // signOut(auth).then(() => {
+  //   // Sign-out successful.
+  //   // return Login;
+    
+  // }).catch((error) => {
+  //   // An error happened.
+  //   console.log('Err', error);
+  //   return;
+  // });
+}
+
+
 
 const styles = StyleSheet.create({
   header_style:{
