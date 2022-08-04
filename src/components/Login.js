@@ -14,10 +14,10 @@ import ButtonSolidSubmit from "../components/commons_components/ButtonSolidSubmi
 import LoginSVG from "../assets/imgs/Login.img";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { AsyncStorage } from "react-native";
-import { async } from "@firebase/util";
 import AuthContext from "../../context";
 
 export default function Login({ navigation }) {
+  const auth = getAuth();
   const { signIn } = React.useContext(AuthContext);
   const [authentication, setAuthentcation] = useState({
     email: "",
@@ -52,12 +52,11 @@ export default function Login({ navigation }) {
   };
   const saveData = async (user) => {
     try {
-      await AsyncStorage.setItem("USER", JSON.stringify(user));
+      await AsyncStorage.setItem("USER", JSON.stringify(user))
     } catch (error) {
       console.log("lõi mẹ r", error);
     }
   };
-  const auth = getAuth();
   return (
     <View style={layouts.container}>
       <Image

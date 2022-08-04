@@ -6,14 +6,40 @@ import {
   Text,
   TouchableOpacity,
 } from "react-native";
-import React from "react";
+import React, {useState} from "react";
 import SignUpSVG from "../assets/imgs/SignUp";
-import {available } from "../themes/_availables";
+import { available } from "../themes/_availables";
 import { layouts } from "../themes/_layout";
 import { utils } from "../themes/utils";
-import ButtonSolid from "./commons_components/ButtonSolid";
+import ButtonSolidSubmit from "./commons_components/ButtonSolidSubmit";
+import {getAuth,createUserWithEmailAndPassword} from "firebase/auth";
+import { getDatabase, ref, set } from "firebase/database";
 
-export default function SignUp({navigation}) {
+export default function SignUp({ navigation }) {
+  const db = getDatabase();
+  const reference = ref(db, "user/");
+  const [account, setAccount] = useState({
+    email: "",
+    password: "",
+    phoneNumber: undefined,
+  });
+  const onHandleSignup = async () => {
+    try {
+      if (account.email !== "" && account.password !== "") {
+        await createUserWithEmailAndPassword(
+          getAuth(),
+          account.email,
+          account.password,
+        ).then(() => {
+          navigation.navigate("Login");
+        });
+        get(reference).then((q) => console.log("kết quả ", q));
+      }
+    } catch (error) {
+      // setSignupError(error.message);
+      console.log("lỗi", error.message);
+    }
+  };
   return (
     <View style={layouts.container}>
       <Image
@@ -39,8 +65,9 @@ export default function SignUp({navigation}) {
           />
           <TextInput
             selectionColor={available.color.primary}
-            placeholder="Enter user name"
+            placeholder="Enter your email"
             style={style.text_input}
+            onChangeText={(email) => setAccount({ ...account, email })}
           ></TextInput>
         </View>
         <View style={[style.text_input_area, style.ip_pass]}>
@@ -53,9 +80,12 @@ export default function SignUp({navigation}) {
             selectionColor={available.color.primary}
             placeholder="Enter password"
             style={style.text_input}
+            onChangeText={(password) => setAccount({ ...account, password })}
           ></TextInput>
         </View>
-        <View style={[style.text_input_area, style.ip_pass, {marginBottom: 10}]}>
+        <View
+          style={[style.text_input_area, style.ip_pass, { marginBottom: 10 }]}
+        >
           <Image
             resizeMode="center"
             style={style.icon_ip}
@@ -67,9 +97,12 @@ export default function SignUp({navigation}) {
             style={style.text_input}
           ></TextInput>
         </View>
-        <ButtonSolid name="Sign Up" />
+        <ButtonSolidSubmit callback={onHandleSignup} name="Sign Up" />
       </View>
-      <Text style={[layouts.text_center, style.help, style.ip_user]} onPress={()=> navigation.navigate("Login")}>
+      <Text
+        style={[layouts.text_center, style.help, style.ip_user]}
+        onPress={() => navigation.navigate("Login")}
+      >
         You have account{" "}
         <Text style={{ color: available.color.primary }}>Login now</Text>
       </Text>
