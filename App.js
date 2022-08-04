@@ -25,17 +25,19 @@ export default function App({ navigation }) {
         case "SIGN_IN":{
           return {
             ...prevState,
-            isSignout: true,
+            isSignout: false,
             userToken: action.token,
           };
         }
-        case "SIGN_OUT":
+        case "SIGN_OUT":{
           return {
             ...prevState,
-            isSignout: false,
+            isSignout: true,
             userToken: null,
           };
       }
+
+        }
     },
     {
       isLoading: true,

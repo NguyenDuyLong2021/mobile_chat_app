@@ -1,10 +1,28 @@
-import { View, Text, StyleSheet, Image, TextInput} from 'react-native'
 import React from 'react'
+import { View, Text, StyleSheet, Image, TextInput, Button} from 'react-native'
 import { available } from '../themes/_availables'
 import avt from '../assets/imgs/avt3.jpg'
 import { FontAwesome } from "@expo/vector-icons";
+import { getAuth, signOut } from 'firebase/auth';
+// import {ref,set,get,getDatabase,query,onValue,off,limitToLast,orderByChild,} from "firebase/database";
+import { AsyncStorage } from 'react-native';
+import AuthContext from '../../context';
+export default function Profile({navigation}) {
+  const { signOut } = React.useContext(AuthContext);
+  
+//   const auth = getAuth();
+//   const logOut =()=>{
+// navigation.popToTop();
+//   } 
 
-export default function Profile(props) {
+  const logOut = () => {
+    signOut()
+      };
+
+  // const database = getDatabase(app);
+  // //Lấy thông tin user từ id
+  // console.log(database);
+  
   return (
     <View style={[{marginTop: available.heightStatusBar}]}>
       <View style={styles.header_style}>
@@ -27,15 +45,42 @@ export default function Profile(props) {
         <Text style={styles.tiltle}>Phone Number</Text>
         <TextInput value='0123456789' style={styles.input}/>
       </View>
-      <View style={styles.btn_logout}>
+      <Button title='Cập nhật' color='#228b22' style={styles.btn_UpDate}>
+
+      </Button>
+      <Button title='dsdasd' style={styles.btn_logout} 
+      // onPress={()=>navigation.navigate("Auth", {isLogin: false})}
+      onPress={logOut}
+      >
         <FontAwesome style={{ fontSize: 18, color: 'white'}} name="sign-out" size={18} color="black"/>
         <Text style={styles.logOutTxt}>Log out</Text>
-      </View>
+      </Button>
       
 
     </View>
   )
 }
+
+
+
+
+// const auth = getAuth();
+
+// const logOut = () => {
+//   signOut(auth).then(() => {
+//     // Sign-out successful.
+//     // return Login;
+//     // console.log("work");
+//     navigation.navigate('Login');
+    
+//   }).catch((error) => {
+//     // An error happened.
+//     console.log('Err', error);
+//     return;
+//   });
+// }
+
+
 
 const styles = StyleSheet.create({
   header_style:{
@@ -110,6 +155,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold', 
     fontSize: 18,
     marginLeft: 10
+  },
+  btn_UpDate: {
+    marginBottom: 50
   }
   });
 
