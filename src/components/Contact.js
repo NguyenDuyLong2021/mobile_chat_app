@@ -1,5 +1,5 @@
-import { View, Text, StyleSheet, FlatList } from "react-native";
-import React from "react";
+import { View, Text, StyleSheet, FlatList, AsyncStorage } from "react-native";
+import React, { useEffect } from "react";
 import {
   Container,
   Card,
@@ -58,6 +58,9 @@ const ChatData = [
 ];
 
 const Contact = ({ navigation }) => {
+  useEffect(async() => {
+   await AsyncStorage.getItem("USER").then((q) => console.log("nfo", q));
+  }, []);
   return (
     <Container>
       <UIHeader title={"Messenger"} />

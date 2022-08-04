@@ -6,12 +6,13 @@ import {
   Text,
   TouchableOpacity,
 } from "react-native";
-import React from "react";
+import React, {useState} from "react";
 import SignUpSVG from "../assets/imgs/SignUp";
 import { available } from "../themes/_availables";
 import { layouts } from "../themes/_layout";
 import { utils } from "../themes/utils";
-import ButtonSolid from "./commons_components/ButtonSolid";
+import ButtonSolidSubmit from "./commons_components/ButtonSolidSubmit";
+import {getAuth,createUserWithEmailAndPassword} from "firebase/auth";
 import { getDatabase, ref, set } from "firebase/database";
 
 export default function SignUp({ navigation }) {
@@ -64,8 +65,9 @@ export default function SignUp({ navigation }) {
           />
           <TextInput
             selectionColor={available.color.primary}
-            placeholder="Enter user name"
+            placeholder="Enter your email"
             style={style.text_input}
+            onChangeText={(email) => setAccount({ ...account, email })}
           ></TextInput>
         </View>
         <View style={[style.text_input_area, style.ip_pass]}>
@@ -78,6 +80,7 @@ export default function SignUp({ navigation }) {
             selectionColor={available.color.primary}
             placeholder="Enter password"
             style={style.text_input}
+            onChangeText={(password) => setAccount({ ...account, password })}
           ></TextInput>
         </View>
         <View
