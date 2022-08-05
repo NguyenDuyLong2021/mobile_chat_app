@@ -19,7 +19,7 @@ import ChatList from "./ChatList";
 
 export default function Chat({ navigation, route }) {
   const [message, setMessage] = useState("");
-  const { userName, roomID } = route.params;
+  const { userName, roomID, avatar } = route.params;
 
   const sendChat = () => {
     if (message !== "") {
@@ -46,11 +46,12 @@ export default function Chat({ navigation, route }) {
               color="black"
             />
           </TouchableOpacity>
-          <Image
-            style={styles.avatar}
-            source={require("../../assets/imgs/long.jpg")}
-          />
-          <Text style={styles.name}>contact Name</Text>
+          <Image style={styles.avatar} source={{ uri: avatar }} />
+          <Text style={styles.name}>
+            {userName.lenght < 10
+              ? userName
+              : userName.substring(0, 10) + "..."}
+          </Text>
         </View>
         <View style={styles.rightHeader}>
           <CustomChatButton
@@ -81,7 +82,6 @@ export default function Chat({ navigation, route }) {
           />
         </View>
       </View>
-      {/* <ChatList datas={datas} sender={SENDER} /> */}
       <ChatList userName={userName} roomID={roomID} />
       <View style={styles.chatFrame}>
         <TextInput
