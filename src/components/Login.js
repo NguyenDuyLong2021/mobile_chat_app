@@ -38,6 +38,7 @@ export default function Login({ navigation }) {
         saveData({
           providerData: user.providerData,
           stsTokenManager: user.stsTokenManager,
+          idUser: user.uid
         });
 
         // console.log(userCredential)
