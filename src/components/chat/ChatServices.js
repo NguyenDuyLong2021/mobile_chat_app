@@ -1,3 +1,4 @@
+import { async } from "@firebase/util";
 import {
   ref,
   set,
@@ -8,6 +9,7 @@ import {
   off,
   limitToLast,
   orderByChild,
+  equalTo,
 } from "firebase/database";
 import app from "../firebase";
 
@@ -27,7 +29,7 @@ const increaseTotalMess = async (room_id) => {
 };
 
 // lưu tin nhắn xuống bảng messages/room_id
-const chat = async (sender, room_id, message) => {
+const chat = async (sender, room_id, message, contactID) => {
   let count = await getCountMessages();
   const path = `messages/room${room_id}/message${count}`.trim();
   const refToSend = ref(database, path);
@@ -41,10 +43,16 @@ const chat = async (sender, room_id, message) => {
     });
     await set(ref(database, "numOfMessages"), ++count);
     increaseTotalMess(room_id);
+    setLastMessage(contactID, message);
     return true;
   } catch {
     return false;
   }
+};
+
+const setLastMessage = async (contactID, message) => {
+  const myQuery = query(ref(database, `contact/contact${contactID}/lastMessage`));
+  await set(myQuery, message);
 };
 
 // Lấy tất cả tin nhắn của 1 phòng chat
@@ -92,8 +100,6 @@ const offMessagesChange = (room_id) => {
   const myQuery = query(ref(database, path));
   off(myQuery, "child_added");
 };
-
-
 
 export {
   getCountMessages,

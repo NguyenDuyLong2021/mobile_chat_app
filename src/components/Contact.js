@@ -7,6 +7,7 @@ import {
   Image,
   TouchableOpacity,
   TextInput,
+  Alert,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import {
@@ -16,24 +17,17 @@ import {
   query,
   orderByChild,
   equalTo,
+  push,
+  set,
 } from "firebase/database";
 import app from "./firebase";
 import { AntDesign } from "@expo/vector-icons";
 
-const ChatData = [
-  {
-    id: "1",
-    userName: "Jenny Doe",
-    userImg: require("../assets/imgs/avt1.jpg"),
-    messageTime: "4 mins ago",
-    messageText:
-      "Hey there, this is my test for a post of my social app in React Native.",
-  },
-];
 const database = getDatabase(app);
 const Contact = ({ navigation }) => {
-  const [user, setUser] = useState(null);
-  const [listContact, setListContact] = useState(null);
+  const [user, setUser] = useState([]);
+  const [listContact, setListContact] = useState([]);
+  const [contactName, setContactName] = useState("");
   // get list contact by id user
   const getListContact = async (idUser) => {
     const myQuery = query(
@@ -60,6 +54,99 @@ const Contact = ({ navigation }) => {
     });
     return;
   }, []);
+  const addContact = async () => {
+    const user = login();
+    const myQuery = query(
+      ref(database, "users"),
+      orderByChild("displayName"),
+      equalTo(contactName)
+    );
+    let userExist = await get(myQuery);
+    if (userExist.val() === null) {
+      Alert.alert("Notification", "Không tìm thấy người dùng", [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        { text: "OK" },
+      ]);
+    } else {
+      const checkAdded = listContact.find(
+        (value) => value.displayName === contactName
+      );
+      if (!checkAdded) {
+        userExist = userExist.val()[Object.keys(userExist.val())[0]];
+        const roomID = await createRoom();
+        const idContact = (await getCountContacts()) + 1;
+        let contact = {
+          contactID: idContact,
+          idUser: user.idUser,
+          contactorID: userExist.idUser,
+          photoURL: "https://i.pravatar.cc/300",
+          displayName: userExist.displayName,
+          lastMessage: "",
+          roomID: roomID,
+          typeContact: "userContact",
+        };
+        const myQuery = ref(database, "contact/contact" + idContact);
+        increaseContact();
+        await set(myQuery, contact);
+        setListContact([...listContact, contact]);
+        const idContact1 = (await getCountContacts()) + 1;
+        const myQuery1 = ref(database, "contact/contact" + idContact1);
+        contact.contactID = idContact1;
+        contact.idUser = userExist.idUser;
+        contact.contactorID = user.idUser;
+        contact.displayName = user.providerData[0].displayName;
+
+        await set(myQuery1, contact);
+      } else {
+        Alert.alert("Notification", "Liên hệ này đã có sẵn", [
+          {
+            text: "Cancel",
+            style: "cancel",
+          },
+          { text: "OK" },
+        ]);
+      }
+    }
+  };
+  // Lấy tổng số tin nhắn trong numOfMessages
+  const getCountContacts = async () => {
+    const myQuery = query(ref(database, "numOfContacts"));
+    const value = await get(myQuery);
+    return value.val();
+  };
+
+  const getCountRooms = async () => {
+    const myQuery = query(ref(database, "numOfRooms"));
+    const value = await get(myQuery);
+    return value.val();
+  };
+
+  const createRoom = async () => {
+    const roomID = (await getCountRooms()) + 1;
+    const room = {
+      idRoom: roomID,
+      totalMess: 0,
+    };
+    const myQuery = ref(database, "rooms/" + roomID);
+    await set(myQuery, room);
+    increaseRoom();
+    return roomID;
+  };
+  // tăng số tin nhắn trong 1 phòng chat lên 1
+  const increaseContact = async () => {
+    const myQuery = ref(database, "numOfContacts");
+    const value = await get(myQuery);
+    await set(myQuery, value.val() + 1);
+  };
+
+  const increaseRoom = async () => {
+    const myQuery = ref(database, "numOfRooms");
+    const value = await get(myQuery);
+    await set(myQuery, value.val() + 1);
+  };
   const login = () => {
     return {
       idUser: "wgFC5F7k1YWzRgex5pjhYKNJDd62",
@@ -90,10 +177,12 @@ const Contact = ({ navigation }) => {
       </View>
       <View style={styles.contactBtns}>
         <TextInput
+          value={contactName}
+          onChangeText={(value) => setContactName(value)}
           style={styles.searchInput}
           placeholder={"Nhập tên cần thêm liên hệ"}
         />
-        <TouchableOpacity style={styles.addContact}>
+        <TouchableOpacity style={styles.addContact} onPress={addContact}>
           <AntDesign
             style={styles.addContactText}
             name="adduser"
@@ -122,18 +211,14 @@ const Contact = ({ navigation }) => {
                 userName: item.displayName,
                 roomID: item.roomID,
                 avatar: item.photoURL,
+                contactID: item.contactID,
               })
             }
           >
             <Image style={styles.avatar} source={{ uri: item.photoURL }} />
             <View style={styles.userInfo}>
               <Text style={styles.userName}>{item.displayName}</Text>
-              {/* <Text style={styles.previewMessage}>{item.messageText}</Text>
-              <Text style={styles.postTime}>{item.messageTime}</Text> */}
-              <Text style={styles.previewMessage}>
-                sadhasgdasd asdhasdg ádhgashd asdhjashd adasd a sda sd á đá á d
-                jakshd sa
-              </Text>
+              <Text style={styles.previewMessage}>{item.lastMessage}</Text>
               <Text style={styles.postTime}>4 min ago</Text>
             </View>
           </TouchableOpacity>
@@ -192,7 +277,7 @@ const styles = StyleSheet.create({
   previewMessage: {
     marginTop: 5,
     marginBottom: "4%",
-    maxWidth: "80%",
+    width: 280,
   },
   postTime: {
     position: "absolute",

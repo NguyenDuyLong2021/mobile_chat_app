@@ -19,11 +19,11 @@ import ChatList from "./ChatList";
 
 export default function Chat({ navigation, route }) {
   const [message, setMessage] = useState("");
-  const { userName, roomID, avatar } = route.params;
+  const { userName, roomID, avatar, contactID } = route.params;
 
   const sendChat = () => {
     if (message !== "") {
-      chat(userName, roomID, message);
+      chat(userName, roomID, message, contactID);
       setMessage("");
     }
   };
