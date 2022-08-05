@@ -93,6 +93,7 @@ export default function BottomNav() {
             color: available.color.white,
             backgroundColor: available.color.primary,
           },
+          tabBarHideOnKeyboard:true,
           // tabBarActiveTintColor: availabels.color.primary,
           title: "Profile",
         }}
