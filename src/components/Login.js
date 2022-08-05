@@ -52,6 +52,7 @@ export default function Login({ navigation }) {
       });
   };
   const saveData = async (user) => {
+    console.log(user);
     try {
       await AsyncStorage.setItem("USER", JSON.stringify(user))
     } catch (error) {
