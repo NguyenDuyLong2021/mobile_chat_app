@@ -1,5 +1,20 @@
 import { View, Text, StyleSheet, FlatList, AsyncStorage } from "react-native";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import {
+  ref,
+  set,
+  get,
+  getDatabase,
+  query,
+  onValue,
+  off,
+  limitToLast,
+  orderByChild,
+  orderByKey,
+  equalTo,
+  orderByPriority,
+  orderByValue,
+} from "firebase/database";
 import {
   Container,
   Card,
@@ -13,6 +28,7 @@ import {
   TextSection,
 } from "../assets/styles/chatStyle";
 import UIHeader from "./UIHeader";
+import app from "./firebase";
 
 const ChatData = [
   {
@@ -56,18 +72,45 @@ const ChatData = [
       "Hey there, this is my test for a post of my social app in React Native.",
   },
 ];
-
+const database = getDatabase(app);
 const Contact = ({ navigation }) => {
-  useEffect(async() => {
-   await AsyncStorage.getItem("USER").then((q) => console.log("nfo", q));
+  const [user, setUser] = useState(null);
+  const [listContact, setListContact] = useState(null);
+  // get list contact by id user
+  const getListContact = async (idUser) => {
+    const myQuery = query(
+      ref(database, "contact"),
+      orderByChild("idUser"),
+      equalTo(idUser)
+    );
+    let listResult = [];
+    return await get(myQuery)
+      .then((data) => {
+        data.forEach((item) => {
+          listResult.push(item);
+        });
+        return listResult;
+      })
+      .catch((err) => console.log("lõi ròi", err));
+  };
+
+  useEffect(async () => {
+    await AsyncStorage.getItem("USER").then((user) => {
+      const data = JSON.parse(user);
+      getListContact(data.idUser).then((result) => {
+        setUser(user);
+        setListContact(result);
+      });
+    });
   }, []);
+  
   return (
     <Container>
       <UIHeader title={"Messenger"} />
       <FlatList
-        data={ChatData}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
+        data={listContact}
+        keyExtractor={(item) => item.contactID}
+        renderItem={({item}) => (
           <Card
             onPress={() =>
               navigation.navigate("Chat", {
@@ -78,14 +121,15 @@ const Contact = ({ navigation }) => {
           >
             <UserInfo>
               <UserImgWrapper>
-                <UserImg source={item.userImg} />
+                <UserImg source={item.photoURL} />
               </UserImgWrapper>
+              {console.log("item", item)}
               <TextSection>
                 <UserInfoText>
-                  <UserName>{item.userName}</UserName>
-                  <PostTime>{item.messageTime}</PostTime>
+                  <UserName>{item.displayName}</UserName>
+                  {/* <PostTime>{item.messageTime}</PostTime> */}
                 </UserInfoText>
-                <MessageText>{item.messageText}</MessageText>
+                {/* <MessageText>{item.messageText}</MessageText> */}
               </TextSection>
             </UserInfo>
           </Card>
