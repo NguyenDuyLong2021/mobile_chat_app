@@ -9,7 +9,7 @@ import {
   TextInput,
   Alert,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   ref,
   get,
@@ -17,26 +17,20 @@ import {
   query,
   orderByChild,
   equalTo,
-  push,
   set,
-  onChildAdded,
   onValue,
-  orderByPriority,
-  orderByKey,
 } from "firebase/database";
 import app from "./firebase";
 import { AntDesign } from "@expo/vector-icons";
-import { async } from "@firebase/util";
 
 const database = getDatabase(app);
 const Contact = ({ navigation }) => {
-  const [user, setUser] = useState([]);
   const [listContact, setListContact] = useState([]);
   const [contactName, setContactName] = useState("");
   // get list contact by id user
   const getListContact = async (idUser) => {
     const myQuery = query(
-      ref(database, "contact"),
+      ref(database, "contacts"),
       orderByChild("idUser"),
       equalTo(idUser)
     );
@@ -50,18 +44,16 @@ const Contact = ({ navigation }) => {
       })
       .catch((err) => console.log("lõi ròi", err));
   };
-
   useEffect(() => {
     let start = 0;
-    const data = login();
     let list = [];
-    getListContact(data.idUser).then((result) => {
-      setUser(user);
+    const user = login();
+    getListContact(user.idUser).then((result) => {
       setListContact(result);
       list = result;
     });
     return onValue(ref(database, "numOfContacts"), () => {
-      getLastContact(data.idUser).then((value) => {
+      getLastContact(user.idUser).then((value) => {
         if (start === 0) {
           start = 1;
         } else {
@@ -79,7 +71,7 @@ const Contact = ({ navigation }) => {
   }, []);
   const getLastContact = async (userID) => {
     const myQuery = query(
-      ref(database, "contact"),
+      ref(database, "contacts"),
       orderByChild("idUser"),
       equalTo(userID)
     );
@@ -144,12 +136,12 @@ const Contact = ({ navigation }) => {
           typeContact: "userContact",
           contactDT: new Date().getTime(),
         };
-        const myQuery = ref(database, "contact/contact" + idContact);
+        const myQuery = ref(database, "contacts/contact" + idContact);
         increaseContact();
         await set(myQuery, contact);
         // setListContact([...listContact, contact]);
         const idContact1 = (await getCountContacts()) + 1;
-        const myQuery1 = ref(database, "contact/contact" + idContact1);
+        const myQuery1 = ref(database, "contacts/contact" + idContact1);
         contact.contactID = idContact1;
         contact.idUser = userExist.idUser;
         contact.contactorID = user.idUser;
@@ -204,6 +196,7 @@ const Contact = ({ navigation }) => {
     const value = await get(myQuery);
     await set(myQuery, value.val() + 1);
   };
+
   const login = () => {
     return {
       idUser: "wgFC5F7k1YWzRgex5pjhYKNJDd62",

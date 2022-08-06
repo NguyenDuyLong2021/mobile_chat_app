@@ -51,7 +51,7 @@ const chat = async (sender, room_id, message, contactID) => {
 };
 
 const setLastMessage = async (contactID, message) => {
-  const myQuery = query(ref(database, `contact/contact${contactID}/lastMessage`));
+  const myQuery = query(ref(database, `contacts/contact${contactID}/lastMessage`));
   await set(myQuery, message);
 };
 
