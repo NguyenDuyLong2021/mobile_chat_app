@@ -18,6 +18,7 @@ import AuthContext from "../../context";
 
 export default function Login({ navigation }) {
   const auth = getAuth();
+  const { setUser } = React.useContext(AuthContext);
   const { signIn } = React.useContext(AuthContext);
   const [authentication, setAuthentcation] = useState({
     email: "",
@@ -50,6 +51,7 @@ export default function Login({ navigation }) {
         const errorMessage = error.message;
         console.log(errorMessage);
       });
+
   };
   const saveData = async (user) => {
     console.log(user);

@@ -9,7 +9,7 @@ import {
   TextInput,
   Alert,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   ref,
   get,
@@ -17,21 +17,20 @@ import {
   query,
   orderByChild,
   equalTo,
-  push,
   set,
+  onValue,
 } from "firebase/database";
 import app from "./firebase";
 import { AntDesign } from "@expo/vector-icons";
 
 const database = getDatabase(app);
 const Contact = ({ navigation }) => {
-  const [user, setUser] = useState([]);
   const [listContact, setListContact] = useState([]);
   const [contactName, setContactName] = useState("");
   // get list contact by id user
   const getListContact = async (idUser) => {
     const myQuery = query(
-      ref(database, "contact"),
+      ref(database, "contacts"),
       orderByChild("idUser"),
       equalTo(idUser)
     );
@@ -45,15 +44,63 @@ const Contact = ({ navigation }) => {
       })
       .catch((err) => console.log("lõi ròi", err));
   };
-
   useEffect(() => {
-    const data = login();
-    getListContact(data.idUser).then((result) => {
-      setUser(user);
+    let start = 0;
+    let list = [];
+    const user = login();
+    getListContact(user.idUser).then((result) => {
       setListContact(result);
+      list = result;
     });
-    return;
+    return onValue(ref(database, "numOfContacts"), () => {
+      getLastContact(user.idUser).then((value) => {
+        if (start === 0) {
+          start = 1;
+        } else {
+          if (
+            value !== null &&
+            value.idUser == login().idUser
+            // !checkExist(list, value.idUser)
+          ) {
+            list = [...list, value];
+            setListContact(list);
+          }
+        }
+      });
+    });
   }, []);
+  const getLastContact = async (userID) => {
+    const myQuery = query(
+      ref(database, "contacts"),
+      orderByChild("idUser"),
+      equalTo(userID)
+    );
+    let contactDatas = null;
+    return await get(myQuery, (data) => {
+      return data;
+    }).then((data) => {
+      contactDatas = null;
+      let tempTime = 0;
+      if (data.val() !== null) {
+        Object.values(data.val()).forEach((value) => {
+          if (value.contactDT !== undefined) {
+            if (value.contactDT > tempTime) {
+              contactDatas = value;
+              tempTime = value.contactDT;
+            }
+          }
+        });
+      }
+      return contactDatas;
+    });
+  };
+  const checkExist = (arr, id) => {
+    if (id !== undefined) {
+      const result = arr.find((value) => value.idUser === id);
+      if (result === undefined) return false;
+      return result === null ? false : true;
+    }
+  };
   const addContact = async () => {
     const user = login();
     const myQuery = query(
@@ -87,17 +134,19 @@ const Contact = ({ navigation }) => {
           lastMessage: "",
           roomID: roomID,
           typeContact: "userContact",
+          contactDT: new Date().getTime(),
         };
-        const myQuery = ref(database, "contact/contact" + idContact);
+        const myQuery = ref(database, "contacts/contact" + idContact);
         increaseContact();
         await set(myQuery, contact);
-        setListContact([...listContact, contact]);
+        // setListContact([...listContact, contact]);
         const idContact1 = (await getCountContacts()) + 1;
-        const myQuery1 = ref(database, "contact/contact" + idContact1);
+        const myQuery1 = ref(database, "contacts/contact" + idContact1);
         contact.contactID = idContact1;
         contact.idUser = userExist.idUser;
         contact.contactorID = user.idUser;
         contact.displayName = user.providerData[0].displayName;
+        contact.contactDT = new Date().getTime();
 
         await set(myQuery1, contact);
       } else {
@@ -147,6 +196,7 @@ const Contact = ({ navigation }) => {
     const value = await get(myQuery);
     await set(myQuery, value.val() + 1);
   };
+
   const login = () => {
     return {
       idUser: "wgFC5F7k1YWzRgex5pjhYKNJDd62",

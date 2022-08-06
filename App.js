@@ -22,27 +22,33 @@ export default function App({ navigation }) {
             userToken: action.token,
             isLoading: false,
           };
-        case "SIGN_IN":{
+        case "SIGN_IN": {
           return {
             ...prevState,
             isSignout: false,
             userToken: action.token,
           };
         }
-        case "SIGN_OUT":{
+        case "SIGN_OUT": {
           return {
             ...prevState,
             isSignout: true,
             userToken: null,
           };
-      }
-
         }
+        case "setUser": {
+          return {
+            ...prevState,
+            user: action.user,
+          };
+        }
+      }
     },
     {
       isLoading: true,
       isSignout: false,
       userToken: null,
+      user: null,
     }
   );
 
@@ -87,6 +93,9 @@ export default function App({ navigation }) {
 
         dispatch({ type: "SIGN_IN", token: "dummy-auth-token" });
       },
+      setUser: async (data) => {
+        dispatch({ type: "setUser", user: data });
+      },
     }),
     []
   );
@@ -99,7 +108,7 @@ export default function App({ navigation }) {
         <StackAuth />
       )} */}
         <Stack.Navigator>
-          {state.isSignout===false ? (
+          {state.isSignout === false ? (
             <Stack.Screen
               options={{ headerShown: false }}
               name="Main"
